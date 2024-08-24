@@ -1,0 +1,9 @@
+<div class="carousel-item active">
+  <div class="cards-wrapper justify-content-center" style="display:flex;">
+    <div class="row gx-3">
+      <% array.forEach(element => { %>
+        <%- include('partials/moviecard', {poster: element.poster, title: element.title}) %>
+      <% }) %>
+    </div>
+  </div>
+</div>

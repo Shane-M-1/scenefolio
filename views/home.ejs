@@ -1,0 +1,27 @@
+<%- include('partials/head') %>
+<%- include('partials/navbar') %>
+  <section>
+    <div class="row text-center">
+      <h1 class="display-4 text-center">Movie Cards</h1>
+      <div class="card align-self center" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title">Card title</h5>
+          <p class="card-text">Movie Poster</p>
+          <p class="card-text">Movie Poster</p>
+        </div>
+      </div>
+      <%- include('partials/moviecard', {poster: img, title: title}) %>
+      <hr>
+    </div>
+  </section>
+  <section>
+    <div class="row">
+      <div class="container">
+        <h1 class="display-3 text-center">MovieApp</h1>
+        <p class="lead text-center">The place for movie lovers to track and expand their taste.</p>
+        <br>
+        <p class="lead text-center">title</p>
+      </div>
+    </div>
+  </section>
+<%- include('partials/foot') %>
