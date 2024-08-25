@@ -1,8 +1,8 @@
-<div class="carousel-item active">
+<div class="carousel-item">
   <div class="cards-wrapper justify-content-center" style="display:flex;">
     <div class="row gx-3">
-      <% array.forEach(element => { %>
-        <%- include('partials/moviecard', {poster: element.poster, title: element.title}) %>
+      <% cards.forEach(element => { %>
+        <%- include('moviecard', {poster: 'https://image.tmdb.org/t/p/original' + element.poster_path, title: element.title, id: element.id}) %>
       <% }) %>
     </div>
   </div>

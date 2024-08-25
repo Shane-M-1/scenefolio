@@ -7,36 +7,11 @@
     <h3>From your wishlist...</h3>
     <div class="carousel carousel-dark slide" id="myCarousel">
       <div class="carousel-inner">
-        <div class="carousel-item active">
-          <div class="cards-wrapper justify-content-center" style="display:flex;">
-            <div class="row gx-3">
-              <%- include('partials/moviecard', {poster: poster, title: "frgth"}) %>
-              <%- include('partials/moviecard', {poster: poster, title: title}) %>
-              <%- include('partials/moviecard', {poster: poster, title: title}) %>
-            </div>
-          </div>
-        </div>
-        <div class="carousel-item">
-          <div class="cards-wrapper justify-content-center" style="display:flex;">
-            <div class="row gx-3">
-              <%- include('partials/moviecard', {poster: poster, title: "blahvevr"}) %>
-              <%- include('partials/moviecard', {poster: poster, title: title}) %>
-              <%- include('partials/moviecard', {poster: poster, title: title}) %>
-              <%- include('partials/moviecard', {poster: poster, title: title}) %>
-              <%- include('partials/moviecard', {poster: poster, title: title}) %>
-              <%- include('partials/moviecard', {poster: poster, title: title}) %>
-            </div>
-          </div>
-        </div>
-        <div class="carousel-item">
-          <div class="cards-wrapper" style="display:flex;">
-            <div class="row gx-3">
-              <%- include('partials/moviecard', {poster: poster, title: title}) %>
-              <%- include('partials/moviecard', {poster: poster, title: title}) %>
-              <%- include('partials/moviecard', {poster: poster, title: title}) %>              
-            </div>
-          </div>
-        </div>
+        <br>
+        <h5>Uh oh! Looks like your wishlist is empty...</h5>
+        <br>
+        <br>
+        <br>
       </div>
       <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev" style="background-color: #e1e1e1;width: 6vh;height: 6vh;
       border-radius: 50%;top: 50%;transform: translateY(-50%);">
@@ -54,39 +29,24 @@
   <script>
   const carousel = new bootstrap.Carousel('#myCarousel');
   const carousel2 = new bootstrap.Carousel('#myCarousel2');
-
   </script>
+
   <div class="row">
     <h3>Popular Today</h3>
     <div class="carousel carousel-dark slide" id="myCarousel2">
       <div class="carousel-inner">
         <div class="carousel-item active">
-          <div class="cards-wrapper" style="display:flex;">
-            <div class="row gx-3">
-              <%- include('partials/moviecard', {poster: poster, title: "frgth"}) %>
-              <%- include('partials/moviecard', {poster: poster, title: title}) %>
-              <%- include('partials/moviecard', {poster: poster, title: title}) %>
+          <div class="cards-wrapper justify-content-center" style="display:flex;">
+            <div class="row gx-2">
+              <% movies.shift().forEach(element => { %>
+                <%- include('partials/moviecard', {poster: 'https://image.tmdb.org/t/p/original' + element.poster_path, title: element.title, id: element.id}) %>
+              <% }) %>
             </div>
           </div>
         </div>
-        <div class="carousel-item">
-          <div class="cards-wrapper" style="display:flex;">
-            <div class="row gx-3">
-              <%- include('partials/moviecard', {poster: poster, title: "blahvevr"}) %>
-              <%- include('partials/moviecard', {poster: poster, title: title}) %>
-              <%- include('partials/moviecard', {poster: poster, title: title}) %>
-            </div>
-          </div>
-        </div>
-        <div class="carousel-item">
-          <div class="cards-wrapper" style="display:flex;">
-            <div class="row gx-3">
-              <%- include('partials/moviecard', {poster: poster, title: title}) %>
-              <%- include('partials/moviecard', {poster: poster, title: title}) %>
-              <%- include('partials/moviecard', {poster: poster, title: title}) %>              
-            </div>
-          </div>
-        </div>
+        <% movies.forEach(element => { %>
+          <%- include('partials/carouselItem', {cards: element}) %>
+        <% }) %>
       </div>
       <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel2" data-bs-slide="prev" style="background-color: #e1e1e1;width: 6vh;height: 6vh;
       border-radius: 50%;top: 50%;transform: translateY(-50%);">

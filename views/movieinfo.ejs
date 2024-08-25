@@ -9,8 +9,8 @@
       <div class="col-auto me-auto text-light">
         <br>
         <figure class="figure text-light">
-          <h1 class=""><%= movieTitle %></h1>          
-          <figcaption class="figure-caption text-light"><%= year %> | <%= rating %> | <%= genres[0] %> | <%= genres[1] %> | <%= runtime + 'min' %></figcaption>
+          <h1 class=""><%= movie.title %></h1>          
+          <figcaption class="figure-caption text-light"><%- movie.release_date.substring(0, 4) %> | <%= movie.vote_avg %> | <%= movie.genres[0].name %> | <%= movie.genres[1].name %> | <%= movie.runtime + 'min' %></figcaption>
           <hr>
         </figure>
       </div>
@@ -28,10 +28,10 @@
     </div>
     <div class="row text-light">
       <div class="col">
-        <img class="img" src=<%= posterImg %> alt="" style="max-width: 50%;">
+        <img class="img" src=<%= 'https://image.tmdb.org/t/p/original' + movie.poster_path  %> alt="" style="max-width: 50%;">
       </div>
       
-      <div class="col-6"><h6><%= description %></h6>
+      <div class="col-6"><h6><%= movie.overview %></h6>
         <dl class="row text-light">
           <dt class="col-sm-3">Directed by</dt>
           <dd class="col-sm-9"><%= director[0] %></dd>
