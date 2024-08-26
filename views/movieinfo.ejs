@@ -10,7 +10,31 @@
         <br>
         <figure class="figure text-light">
           <h1 class=""><%= movie.title %></h1>          
-          <figcaption class="figure-caption text-light"><%- movie.release_date.substring(0, 4) %> | <%= movie.vote_avg %> | <%= movie.genres[0].name %> | <%= movie.genres[1].name %> | <%= movie.runtime + 'min' %></figcaption>
+          
+          <figcaption class="figure-caption text-light">
+            <% if (movie.release_date) { %>
+            <%- movie.release_date.substring(0, 4) %>
+          <% } else { %>
+           Year N/A
+           <% } %>
+           <%- '| ' + (movie.vote_average ?? 'Rating N/A') %>
+           <% if (movie.genres[0]) { %>
+            <%= '| ' + movie.genres[0].name %> 
+            <% } %>
+           <% if (movie.genres[1]) { %>
+            <%= '| ' + movie.genres[1].name %>
+            <% } %>
+            <% if (movie.runtime) { %>
+              <%= '| ' + movie.runtime + 'min' %>
+            <% } else { %>
+              | Runtime N/A
+            <% } %>
+          </figcaption>
+          
+
+
+            
+          
           <hr>
         </figure>
       </div>
@@ -49,11 +73,14 @@
           <dt class="col-sm-3">Starring</dt>
           <dd class="col-sm-9">
             <% stars.forEach(element => { %>
-              <% if (stars[0] != element) { %>
-                &#x2022;
+              <% if (element) { %>
+                <% if (stars[0] != element) { %>
+                  &#x2022;
+                <% } %>
+               <%= element.name %>
               <% } %>
-             <%= element.name %>
-            <% }) %>
+              <% }) %>
+              
           </dd>
         
           

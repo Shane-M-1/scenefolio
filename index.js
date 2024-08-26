@@ -1,5 +1,6 @@
 require('dotenv').config();
 const axios = require('axios');
+const bodyParser = require('body-parser');
 const express = require("express");
 const app = express();
 const path = require('path');
@@ -7,31 +8,21 @@ const key = process.env.API_KEY;
 const basePath = process.env.BASE_PATH;
 const imgPath = process.env.IMG_PATH;
 const port = process.env.PORT;
+
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '/views'));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 app.get('/', async (req, res) => {
-  // const poster = await getImg();
-  // const t = await getTitle();
-  // res.render('home', {img: imgPath + poster, title: t});
-    const data = await getMovie(533535);
-    res.render('home', {img: imgPath + data.poster_path, title: data.title});
+  const poster = await getImg(533535);
+  const t = await getTitle(533535);
+  res.render('home', {img: imgPath + poster, title: t});
+    // const data = await getMovie(533535);
+    // res.render('home', {img: imgPath + data.poster_path, title: data.title});
 });
 
 app.get('/explore/:id', async (req, res) => {
-  // const stars = await getStars(id);
-  // const poster = await getImg(id);
-  // const title = await getTitle(id);
-  // const desc = await getOverview(id);
-  // const bd = await getBackdrop(id);
-  // const vote = await getRating(id);
-  // const yr = await getYear(id);
-  // const g = await getTopGenres(id);
-  // const r = await getRuntime(id);
-  // const d = await getDirector(id);
-  // const w = await getWriters(id);
-  // const t = await getTagline(id);
-  // res.render('movieinfo', {movieTitle: title, posterImg: imgPath + poster, description: desc, backdrop: imgPath + bd, rating: vote, year: yr, genres: g, runtime: r, director: d, writers: w, stars: stars, tagline: t});
   const data = await getMovie(req.params.id);
   const backdrop = await getBackdrop(req.params.id);
   const stars = await getStars(req.params.id);
@@ -43,8 +34,24 @@ app.get('/explore/:id', async (req, res) => {
 app.get('/explore', async (req, res) => {
   // const p = await getImg();
   // const t = await getTitle();
-  const m = await getPopular();
+  const m = await getPopularCarousel();
   res.render('explore', {movies: m});
+});
+
+app.get('/search', async (req, res) => {
+  console.log(req.query.search);
+  const results = await Search(req.query.search);
+  res.render('results', {results: results, isExplore: false});
+});
+
+app.get('/all/:page', async (req, res) => {
+  const m = await getAllPopular(req.params.page);
+  if (m) {
+    res.render('results', {results: m, isExplore: true, nextPage: parseInt(req.params.page) + 1});
+  } else {
+    res.send('Oops! Gone one page too far!'); // eventually add real handling
+  }
+  
 });
 
 app.use((req, res) => {
@@ -75,7 +82,12 @@ async function getTitle(id) {
 async function getBackdrop(id) {
   const response = await axios.get(basePath + '/movie/' + id + '/images' + key);
 
-  return response.data.backdrops[0].file_path;
+  if (response.data.backdrops[0]) {
+    return response.data.backdrops[0].file_path;
+  } else {
+    return 'n/a';
+  }
+  
 }
 
 async function getStars(id) {
@@ -140,7 +152,7 @@ async function getRecommendations(id) {
   const response = await axios.get(basePath + '/movie/' + id + '/recommendations' + key);
 }
 
-async function getPopular() {
+async function getPopularCarousel() {
   const response = await axios.get(basePath + '/discover/movie' + key + '&sort_by=popularity.desc');
   const movies = [];
   let i = 0;
@@ -156,4 +168,15 @@ async function getPopular() {
     }
   }
   return movies;
+}
+
+async function Search(query) {
+  const response = await axios.get(basePath + '/search/movie' + key + '&query=' + query);
+  console.log(response.data);
+  return response.data.results;
+}
+
+async function getAllPopular(page) {
+  const response = await axios.get(basePath + '/discover/movie' + key + '&sort_by=popularity.desc' + '&page=' + page);
+  return response.data.results;
 }
