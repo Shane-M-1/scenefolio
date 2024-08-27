@@ -2,9 +2,7 @@
 <%- include('partials/navbar') %>
 
 <div class="container-fluid ">
-  <br>
-  <br>
-  <div class="row">
+  <div class="row mt-4">
     
     <div class="mb-3">
       <!-- <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16" style="position:absolute;top:92px;left:128px;">
@@ -13,22 +11,24 @@
       <form action="/search" method="GET"><input type="text" class="form-control" id="search-bar" placeholder="Search..." autocomplete="off" name="search"></form>
     </div>
   </div>
-  <div class="row">
+  <div class="row justify-content-between">
   <% results.forEach(element => { %>
    <%- include('partials/moviecard', {poster: 'https://image.tmdb.org/t/p/original' + element.poster_path, title: element.title, id: element.id})%>
   <% }) %>
   </div>
   <% if (isExplore) { %>
-    <nav>
-      <ul class="pagination">
-        <li class=<% if (nextPage == 2) { %>
-         <%= 'page-item disabled' %>
-        <% } else { %>
-          <%= 'page-item' %>
-        <% } %>><a class="page-link" href=<%= '/all/' + (nextPage - 2) %>>Previous</a></li>
-        <li class="page-item"><a class="page-link" href=<%= '/all/' + nextPage %>>Next</a></li>
-      </ul>
-    </nav>
+    <div class="d-flex flex-row-reverse">
+      <nav>
+        <ul class="pagination">
+          <li class=<% if (nextPage == 2) { %>
+           <%= "disabled" + " page-item" %>><a class="page-link">Previous</a></li>
+          <% } else { %>
+            <%= 'page-item' %>><a class="page-link" href=<%= '/all/' + (nextPage - 2) %>>Previous</a></li>
+          <% } %>
+          <li class="page-item"><a class="page-link" href=<%= '/all/' + nextPage %>>Next</a></li>
+        </ul>
+      </nav>
+    </div>
   <% } %>
 </div>
 <%- include('partials/foot') %>
