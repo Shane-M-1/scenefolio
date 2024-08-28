@@ -14,14 +14,25 @@ router.get('/signup', async (req, res) => {
 router.post('/signup', async (req, res) => {
   const {username, password, email} = req.body;
   const hashedPassword = await bcrypt.hash(password, 12);
-  const user = new User({
-    username, 
-    password: hashedPassword,
-    email
-  });
-  await user.save();
-  req.session.user_id = user._id;
-  res.redirect('/explore');
+  const sameName = await User.findOne({username});
+  const sameEmail = await User.findOne({email});
+
+  if (sameEmail) {
+    req.flash('error', 'Account with that email already exists!');
+  } else if (sameName) {
+    req.flash('error', 'Username already taken!');
+  } else {
+    const newUser = new User({
+      username, 
+      password: hashedPassword,
+      email
+    });
+    await newUser.save();
+    req.session.user_id = newUser._id;
+    return res.redirect('/explore');
+  }
+
+  res.redirect('/users/signup');
 });
 
 router.post('/login', async (req, res) => {
