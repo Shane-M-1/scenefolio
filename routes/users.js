@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const User = require('./../models/user');
+const Wish = require('./../models/wishlist');
+const TMDB = require('./../tmdb');
 
 router.get('/login', async (req, res) => {
   res.render('login');
@@ -52,6 +54,20 @@ router.get('/signout', async (req, res) => {
   req.session.user_id = null;
   req.flash('success', 'Logged Out');
   res.redirect('/users/login');
+});
+
+router.get('/wishlist/:page', async (req, res) => {
+  const movies = await Wish.find({user_id: req.session.user_id});
+  const arr = [];
+
+  for (let elem of movies) {
+    const m = await TMDB.getMovie(elem.mID);
+    console.log(m);
+    console.log(arr.push(m));
+  }
+
+  console.log(arr[1]);
+  res.render('wish', {movies: arr});
 });
 
 module.exports = router;

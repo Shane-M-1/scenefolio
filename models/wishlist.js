@@ -2,11 +2,15 @@ const mongoose = require('mongoose');
 
 const wishSchema = new mongoose.Schema({
   mID: {
-    type: String,
+    type: Number,
     required: true
+  },
+  user_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
   }
 });
 
-const Wishlist = mongoose.model('Wishlist', wishSchema);
+const Wish = mongoose.model('Wish', wishSchema);
 
-module.exports = Wishlist;
+module.exports = Wish;
