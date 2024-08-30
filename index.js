@@ -33,7 +33,7 @@ app.use((req, res, next) => {
   res.locals.error = req.flash('error');
   next();
 });
-app.use((req, res , next) => {
+app.use((req, res, next) => {
   if (req.session.user_id) {
     res.locals.authenticated = true;
   } else {

@@ -3,6 +3,7 @@ const key = process.env.API_KEY;
 const basePath = process.env.BASE_PATH;
 const imgPath = process.env.IMG_PATH;
 const axios = require('axios');
+const Wish = require('./models/wishlist'); 
 
 const TMDB = {
   
@@ -110,6 +111,35 @@ const TMDB = {
       }
     }
     return movies;
+  },
+
+  getWishCarousel: async function (uid) {
+    const response = await Wish.find({user_id: uid});
+    if (response.length === 0) {
+      return null;
+    }
+    const arr = [];
+    
+    for (let elem of response) {
+      const m = await TMDB.getMovie(elem.mID);
+      arr.push(m);
+    }
+
+    const wishlist = [];
+    let i = 0;
+    let temp = [];
+
+    for (const e of arr) {
+      temp.push(e);
+      i++;
+      if (i == Math.min(6, arr.length)) {
+        wishlist.push(temp);
+        temp = [];
+        i = 0;
+      }
+    }
+    wishlist.push(temp);
+    return wishlist;
   },
   
   search: async function (query) {

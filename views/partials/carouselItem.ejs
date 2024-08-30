@@ -2,7 +2,7 @@
   <div class="cards-wrapper justify-content-center" style="display:flex;">
     <div class="row gx-3">
       <% cards.forEach(element => { %>
-        <%- include('moviecard', {poster: 'https://image.tmdb.org/t/p/original' + element.poster_path, title: element.title, id: element.id}) %>
+        <%- include('moviecard', {poster: element.poster_path, title: element.title, id: element.id, fromWatch: false}) %>
       <% }) %>
     </div>
   </div>

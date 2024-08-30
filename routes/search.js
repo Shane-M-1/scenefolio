@@ -3,9 +3,8 @@ const router = express.Router();
 const TMDB = require('./../tmdb');
 
 router.get('/', async (req, res) => {
-  console.log(req.query.search);
   const results = await TMDB.search(req.query.search);
-  res.render('results', {results: results, isExplore: false});
+  res.render('results', {results: results, isExplore: false, query: 'Showing results for "' + req.query.search + '"'});
 });
 
 module.exports = router;
