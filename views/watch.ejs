@@ -1,0 +1,12 @@
+<%- include('partials/head') %>
+<%- include('partials/navbar') %>
+
+<div class="container">
+  <div class="row mt-3"><h1>Movies you've seen so far</h1></div>
+  <div class="row mt-3 justify-content-center">
+  <% movies.forEach(element => { %>
+  <%- include('partials/moviecard', {poster: element.poster_path, title: element.title, id: element.id, fromWatch: true}) %>
+  <% }) %>
+  </div>
+</div>
+<%- include('partials/foot') %>

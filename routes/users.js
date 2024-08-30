@@ -3,7 +3,9 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const User = require('./../models/user');
 const Wish = require('./../models/wishlist');
+const Watch = require('./../models/watchlist');
 const TMDB = require('./../tmdb');
+const isLoggedIn = require('../middleware');
 
 router.get('/login', async (req, res) => {
   res.render('login');
@@ -59,15 +61,47 @@ router.get('/signout', async (req, res) => {
 router.get('/wishlist/:page', async (req, res) => {
   const movies = await Wish.find({user_id: req.session.user_id});
   const arr = [];
-
   for (let elem of movies) {
     const m = await TMDB.getMovie(elem.mID);
-    console.log(m);
-    console.log(arr.push(m));
+    arr.push(m)
   }
 
   console.log(arr[1]);
   res.render('wish', {movies: arr});
+});
+
+router.get('/watchlist/:page', async (req, res) => {
+  const movies = await Watch.find({user_id: req.session.user_id});
+  const arr = [];
+
+  for (let elem of movies) {
+    const m = await TMDB.getMovie(elem.mID);
+    arr.push(m)
+  }
+  res.render('watch', {movies: arr});
+});
+
+router.get('/watch-info/:id', isLoggedIn, async (req, res) => {
+  const data = await TMDB.getMovie(req.params.id);
+  const backdrop = await TMDB.getBackdrop(req.params.id);
+  const stars = await TMDB.getStars(req.params.id);
+  const dir = await TMDB.getDirector(req.params.id);
+  const writers = await TMDB.getWriters(req.params.id);
+  const db = await Watch.findOne({mID: req.params.id, user_id: req.session.user_id});
+  res.render('watchedInfo', {movie: data, backdrop: 'https://image.tmdb.org/t/p/original' + backdrop, stars: stars, director: dir, writers: writers, rating: db.rating, comment: db.comment});
+});
+
+router.post('/watch-update', async (req, res) => {
+  const {mID, rating, comment} = req.body;
+  const updatedMovie = await Watch.findOneAndUpdate({mID, user_id: req.session.user_id, rating, comment});
+  await updatedMovie.save();
+  res.redirect('/users/watch-info/' + mID);
+});
+
+router.post('/watch-delete', async (req, res) => {
+  const { mID } = req.body;
+  await Watch.findOneAndDelete({mID: mID, user_id: req.session.user_id});
+  res.redirect('/users/watchlist/1');
 });
 
 module.exports = router;

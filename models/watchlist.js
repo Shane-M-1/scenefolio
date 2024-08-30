@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const watchedSchema = new mongoose.Schema({
   mID: {
-    type: String,
+    type: Number,
     required: true
   },
   rating: Number, 
@@ -13,6 +13,6 @@ const watchedSchema = new mongoose.Schema({
   }
 });
 
-const Watchedlist = mongoose.model('Watchedlist', watchedSchema);
+const Watched = mongoose.model('Watchedlist', watchedSchema);
 
-module.exports = Watchedlist;
+module.exports = Watched;

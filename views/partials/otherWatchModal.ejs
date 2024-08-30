@@ -1,0 +1,57 @@
+<button type="button" class="btn text-light" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Your Review</button>
+<div class="modal fade text-dark" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel"><%= `Your review for ${movie.title}` %></h1>
+        <button type="button" class="btn-close closer" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="/users/watch-update" method="POST">
+          <input type="hidden" name="mID" value=<%= movie.id%>>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">Your rating:</span>
+            <input type="number" class="form-control" name="rating" id="rating" aria-describedby="basic-addon1" style="max-width: 20%;" min="0" max="10" value=<%= rating %> disabled>
+            <span class="input-group-text">/ 10</span>
+          </div>
+          <div class="mb-3">
+            <label for="comment" class="col-form-label">Your comment on the movie:</label>
+            <textarea class="form-control" name="comment" id="comment" disabled><%= comment %></textarea>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary closer" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="edit-btn">Edit</button>
+        <button type="button" class="btn btn-danger closer" id="cancel" hidden>Cancel</button>
+        <button type="submit" class="btn btn-primary" id="save" hidden>Save Changes</button>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
+<script>
+  const edit = document.getElementById('edit-btn');
+  const rating = document.getElementById('rating');
+  const comment = document.getElementById('comment');
+  const save = document.getElementById('save');
+  const cancel = document.getElementById('cancel');
+
+  edit.addEventListener('click', () => {
+      edit.hidden = true;
+      cancel.hidden = false;
+      save.hidden = false;
+      rating.disabled = false;
+      comment.disabled = false;
+  });
+  const closers = document.getElementsByClassName('closer');
+  for(let i = 0; i < closers.length; i++) {
+    const e = closers[i];
+    e.addEventListener('click', () => {
+      edit.hidden = false;
+      cancel.hidden = true;
+      save.hidden = true;
+      rating.disabled = true;
+      comment.disabled = true;
+    });
+  }
+</script>
