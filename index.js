@@ -12,14 +12,25 @@ const search = require('./routes/search');
 const session = require('express-session');
 const flash = require('connect-flash');
 const secret = process.env.SECRET;
+const db_key = process.env.DB_KEY;
+const MongoStore = require('connect-mongo');
 
-mongoose.connect('mongodb://localhost:27017/movieApp')
+mongodb://localhost:27017/movieApp
+mongoose.connect(db_key)
   .then(() => {
     console.log('MongoDB connection started');
   })
   .catch((e) => {
     console.log(e);
   });
+
+const store = MongoStore.create({
+  mongoUrl: db_key,
+  touchAfter: 24 * 60 * 60,
+  crypto: {
+    secret: secret
+  }
+})
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '/views'));
