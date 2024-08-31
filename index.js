@@ -30,14 +30,14 @@ const store = MongoStore.create({
   crypto: {
     secret: secret
   }
-})
+});
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '/views'));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(session({secret: secret, resave: false, saveUninitialized: false}));
+app.use(session({secret: secret, resave: false, saveUninitialized: false, store}));
 app.use(flash());
 app.use((req, res, next) => {
   res.locals.success = req.flash('success');
