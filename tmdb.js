@@ -1,10 +1,8 @@
 require('dotenv').config();
-const key = process.env.API_KEY;
-const basePath = process.env.BASE_PATH;
-const imgPath = process.env.IMG_PATH;
 const axios = require('axios');
 const Wish = require('./models/wishlist'); 
-
+const key = process.env.API_KEY;
+const basePath = 'https://api.themoviedb.org/3';
 const TMDB = {
   
   getMovie: async function (id) {

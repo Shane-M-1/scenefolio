@@ -2,9 +2,8 @@ require('dotenv').config();
 const express = require("express");
 const app = express();
 const path = require('path');
-const imgPath = process.env.IMG_PATH;
+const imgPath = 'https://image.tmdb.org/t/p/original';
 const mongoose = require('mongoose');
-const User = require('./models/user');
 const TMDB = require('./tmdb');
 const explore = require('./routes/explore');
 const users = require('./routes/users');
@@ -12,6 +11,7 @@ const all = require('./routes/all');
 const search = require('./routes/search');
 const session = require('express-session');
 const flash = require('connect-flash');
+const secret = process.env.SECRET;
 
 mongoose.connect('mongodb://localhost:27017/movieApp')
   .then(() => {
@@ -26,7 +26,7 @@ app.set('views', path.join(__dirname, '/views'));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(session({secret: 'secret', resave: false, saveUninitialized: false}));
+app.use(session({secret: secret, resave: false, saveUninitialized: false}));
 app.use(flash());
 app.use((req, res, next) => {
   res.locals.success = req.flash('success');
@@ -61,11 +61,20 @@ app.get('/', async (req, res) => {
   res.render('home', {img: imgPath + poster, title: t});
 });
 
-app.use((req, res) => {
-  res.send("Hello response");
+app.all('*', (req, res) => {
+  req.flash('error', "Sorry we can't find the page you are looking for!");
+  res.redirect('/explore');
 });
 
 app.listen(3000, () => {
   console.log("App started");
 });
 
+app.use((err, req, res, next) => {
+  if (req.fromExplore) {
+    res.send(err.message);
+  } else {
+    req.flash('error', err.message);
+    res.redirect('/explore');
+  }
+});

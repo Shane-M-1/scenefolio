@@ -4,7 +4,7 @@
 <section>
 
 <div class="container-fluid">
-  <div class="row h-100" id="bg-img" style="background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(<%= backdrop %>);background-size:cover;background-repeat:no-repeat;">
+  <div class="row h-100" id="bg-img" style="background: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)), url(<%= 'https://image.tmdb.org/t/p/original' + backdrop %>);background-size:cover;background-repeat:no-repeat;">
     <div class="row">
       <div class="col-auto me-auto text-light">
         <br>
@@ -72,10 +72,14 @@
       <% if (!movie.overview && !movie.poster_path) { %>
         <h4>Sorry! Information about this movie is currently unavailable</h4>
       <% } else { %> 
-        <div class="col">
-          <img class="img" src=<%= 'https://image.tmdb.org/t/p/original' + movie.poster_path  %> alt="" style="max-width: 50%;">
+        <div class="col ms-2">
+          <% if (movie.poster_path) { %>
+            <img class="img mb-2" src=<%= 'https://image.tmdb.org/t/p/original' + movie.poster_path  %> alt="" style="max-width: 50%;"> 
+            <% } else { %>
+            <img class="img mb-2" src="https://cringemdb.com/img/movie-poster-placeholder.png" alt="" style="max-width: 50%;"> 
+            <% } %>
         </div>
-        <div class="col-6">
+        <div class="col-6 me-3 mt-2">
           <% if (movie.overview) { %>
            <h6><%= movie.overview %></h6>
           <% } else { %>
