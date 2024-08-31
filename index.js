@@ -11,6 +11,7 @@ const all = require('./routes/all');
 const search = require('./routes/search');
 const session = require('express-session');
 const flash = require('connect-flash');
+const favicon = require('serve-favicon');
 const secret = process.env.SECRET;
 const db_key = process.env.DB_KEY;
 const MongoStore = require('connect-mongo');
@@ -34,7 +35,7 @@ const store = MongoStore.create({
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '/views'));
-
+app.use(favicon(path.join(__dirname, '/favicon', 'favicon.ico')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(session({secret: secret, resave: false, saveUninitialized: false, store}));
@@ -67,9 +68,9 @@ app.get('/secret', (req, res) => {
 });
 
 app.get('/', async (req, res) => {
-  const poster = await TMDB.getImg(533535);
-  const t = await TMDB.getTitle(533535);
-  res.render('home', {img: imgPath + poster, title: t});
+  // const poster = await TMDB.getImg(533535);
+  // const t = await TMDB.getTitle(533535);
+  res.redirect('/explore');
 });
 
 app.all('*', (req, res) => {
