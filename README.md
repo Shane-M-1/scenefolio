@@ -1,6 +1,6 @@
 # SceneFolio
 
-A full-stack web app built with the TMDB api for movie lovers to track and expand their taste.
+A full-stack web app built with the TMDB API for movie lovers to track and expand their taste.
 
 ## Tech-stack
 - Node.js
